@@ -1,2 +1,2 @@
 apply plugin:'application'
-mainClassName = "MyFirstProgram"
+mainClassName = "st.stqa.pft.sandbox.MyFirstProgram"
