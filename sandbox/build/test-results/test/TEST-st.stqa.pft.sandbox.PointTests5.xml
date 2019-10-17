@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="st.stqa.pft.sandbox.PointTests5" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-10-16T17:57:37" hostname="Admin-PC" time="0.023">
-  <properties/>
-  <testcase name="testDistance5" classname="st.stqa.pft.sandbox.PointTests5" time="0.023"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
