@@ -8,12 +8,8 @@ import static st.stqa.pft.sandbox.MyFirstProgram.distance;
 public class PointTest3 {
   @Test
   public void testDistance3() {
-    Point p1 = new Point();
-    Point p2 = new Point();
-    p1.x = 5;
-    p1.y = 8;
-    p2.x = 5;
-    p2.y = 6;
-    Assert.assertEquals(distance(p1,p2),5);
+    Point p1 = new Point(7.0,8.0);
+    Point p2 = new Point(5.0,6.0);
+    Assert.assertEquals(p1.distance(p2),5);
   }
 }
