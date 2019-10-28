@@ -7,7 +7,7 @@ import org.testng.annotations.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class ContactGroupCreation {
+public class ContactGroupCreation  {
   private WebDriver wd;
 
   @BeforeMethod(alwaysRun = true)
