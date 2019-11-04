@@ -1,14 +1,12 @@
 package ru.stqa.pft.addressbook.tests;
-
 import org.testng.annotations.Test;
-import ru.stqa.pft.addressbook.model.GroupDataSart;
-
-public class ContactGroupCreation extends ContactBase {
-
+import ru.stqa.pft.addressbook.model.ContactData;
+public class ContactGroupCreation extends TestBase {
   @Test
-  public void testContactCreation() throws Exception {
-    cont.getContactHelper().fillContactForm(
-            new GroupDataSart("Olga", "Evgenyevna", "Sartakova", "Nowosibirsk", "89485785870", "sartakowa.olya@yandex.ru"));
-    cont.getContactHelper().EnterContactCreation();
+  public void testUntitledTestCase() {
+    app.contactHelper().initCreateNewContact();
+    app.contactHelper().createContact(new ContactData("Sartakova", "Olga", "Evgenyvna","sara", "9556468355", "sartakova@mail.ru" ));
+    app.getNavigationHelper().homePageClick();
+    app.getNavigationHelper().logout();
   }
 }
