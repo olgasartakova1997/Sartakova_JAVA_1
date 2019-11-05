@@ -13,8 +13,7 @@ public class NavigationHelper extends HelperBase {
     wd.findElement(By.linkText("home page")).click();
   }
 
-  public void logout() {
-    wd.findElement(By.linkText("Logout")).click();
+  public void gotoContactList() {
+    click(By.linkText("home"));
   }
-
 }

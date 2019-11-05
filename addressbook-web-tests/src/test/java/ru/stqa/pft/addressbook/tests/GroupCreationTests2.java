@@ -8,8 +8,8 @@ public class GroupCreationTests2 extends TestBase{
 
     app.getNavigationHelper().gotoGroupPage();
     app.getGroupHelper().initGroupCreation();
-    app.getGroupHelper().fillGroupForm(new GroupData("Name", "Header", "Footer"));
+    app.getGroupHelper().fillGroupForm(new GroupData("sart1", "sart2", "sart3"));
     app.getGroupHelper().submitGroupCreation();
-    app.logout();
+    app.getSessionHelper().logout();
   }
 }

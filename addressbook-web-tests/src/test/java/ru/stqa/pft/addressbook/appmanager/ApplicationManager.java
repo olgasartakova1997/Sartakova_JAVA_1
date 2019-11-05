@@ -38,7 +38,7 @@ public class ApplicationManager {
     return contactHelper;
   }
 
-  public void logout() {
-    wd.findElement(By.linkText("Logout")).click();
+  public SessionHelper getSessionHelper() {
+    return sessionHelper;
   }
 }
