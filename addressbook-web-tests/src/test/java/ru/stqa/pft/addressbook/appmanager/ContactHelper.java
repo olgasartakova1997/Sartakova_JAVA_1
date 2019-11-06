@@ -52,4 +52,12 @@ public class ContactHelper extends HelperBase {
   public void updateContact() {
     click(By.xpath("//input[@value='Update']"));
   }
+
+  public boolean isThereAGroup() {
+    return isElementPresent(By.name("selected[]"));
+  }
+
+  public boolean isThereAContact() {
+    return isElementPresent(By.name("selected[]"));
+  }
 }
