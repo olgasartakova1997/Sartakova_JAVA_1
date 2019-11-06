@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.NoSuchElementException;
+
 public class HelperBase {
   protected final WebDriver wd;
 
@@ -17,15 +19,11 @@ public class HelperBase {
   }
 
   public void type(By locator, String text) {
-    if (text != null) {
-      String existingText = wd.findElement(locator).getAttribute("value");
-      if (! text.equals(existingText)) {
         wd.findElement(locator).click();
         wd.findElement(locator).clear();
         wd.findElement(locator).sendKeys(text);
       }
-    }
-  }
+
   public void selectType(By locator, String sType) {
     wd.findElement(locator).click();
     new Select(wd.findElement(locator)).selectByVisibleText(sType);
@@ -42,4 +40,13 @@ public class HelperBase {
   public void alertAccept() {
     wd.switchTo().alert().accept();
   }
+
+  protected boolean isElementPresent(By locator) {
+    try {
+      wd.findElement(locator);
+      return true;
+    } catch (NoSuchElementException ex){
+      return false;
+  }
+}
 }
