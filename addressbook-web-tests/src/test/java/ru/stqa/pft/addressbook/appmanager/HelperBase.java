@@ -4,9 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.NoSuchElementException;
+import org.openqa.selenium.NoSuchElementException;
 
 public class HelperBase {
   protected final WebDriver wd;

@@ -4,10 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import ru.stqa.pft.addressbook.appmanager.HelperBase;
 import ru.stqa.pft.addressbook.model.ContactData;
-
-import java.util.NoSuchElementException;
 
 public class ContactHelper extends HelperBase {
 
@@ -16,11 +13,14 @@ public class ContactHelper extends HelperBase {
   }
 
   public void createContact(ContactData contactData, boolean creation) {
+    click(By.linkText("add new"));
     type(By.name("firstname"), contactData.getFirst_name());
     type(By.name("middlename"), contactData.getMiddle_name());
     type(By.name("lastname"), contactData.getLast_name());
     type(By.name("mobile"), contactData.getMobile_phone());
     type(By.name("email"), contactData.getEmail());
+    click(By.name("submit"));
+    click(By.linkText("home page"));
 
     if (contactData.getGroup() == null) {
       return;
@@ -30,7 +30,6 @@ public class ContactHelper extends HelperBase {
       } else {
         Assert.assertFalse(isElementPresent(By.name("new_group")));
       }
-      click(By.name("submit"));
     }
   }
   public void initCreateNewContact() {
@@ -46,15 +45,11 @@ public class ContactHelper extends HelperBase {
   }
 
   public void editContact() {
-    click(By.xpath("//tr[2]/td[8]/a"));
+    click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img"));
   }
 
   public void updateContact() {
     click(By.xpath("//input[@value='Update']"));
-  }
-
-  public boolean isThereAGroup() {
-    return isElementPresent(By.name("selected[]"));
   }
 
   public boolean isThereAContact() {
