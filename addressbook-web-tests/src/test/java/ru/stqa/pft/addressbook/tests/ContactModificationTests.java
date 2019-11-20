@@ -11,7 +11,7 @@ import java.util.List;
 public class ContactModificationTests extends TestBase {
   @Test(enabled=false)
   public void testContactModification() {
-    app.getNavigationHelper().gotoContactList();
+    app.goTo().gotoContactList();
     if (!app.contactHelper().isThereAContact()) {
       app.contactHelper().createContact(new ContactData("sartakova", "olga", "evgenyevna",
               "sara", "35435", "sara@jhdj",  null), false);
@@ -22,7 +22,7 @@ public class ContactModificationTests extends TestBase {
     ContactData contact = new ContactData(before.get(before.size() - 1).getId(), "sarka", "456789");
     app.contactHelper().fillContactForm(contact);
     app.contactHelper().updateContact();
-    app.getNavigationHelper().gotoContactList();
+    app.goTo().gotoContactList();
     List<ContactData> after = app.contactHelper().getContactList();
     app.getSessionHelper().logout();
 

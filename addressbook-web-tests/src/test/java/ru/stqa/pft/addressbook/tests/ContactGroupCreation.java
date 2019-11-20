@@ -2,15 +2,14 @@ package ru.stqa.pft.addressbook.tests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import java.util.Collection;
-import java.util.Collections;
+
 import java.util.Comparator;
 import java.util.List;
 public class ContactGroupCreation extends TestBase {
   @Test(enabled=false)
 
     public void testContactCreate() throws Exception {
-    app.getNavigationHelper().gotoContactList();
+    app.goTo().gotoContactList();
     List<ContactData> before = app.contactHelper().getContactList();
     ContactData contact = new ContactData("Sartakova", "Olga", "Evgenyvna","sara", "9556468355", "sartakova@mail.ru", null );
     app.contactHelper().createContact(contact, true);
