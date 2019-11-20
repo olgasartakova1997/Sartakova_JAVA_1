@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 public class ContactGroupCreation extends TestBase {
-  @Test
+  @Test(enabled=false)
 
     public void testContactCreate() throws Exception {
     app.getNavigationHelper().gotoContactList();
