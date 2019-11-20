@@ -11,7 +11,7 @@ public class GroupCreationTests2 extends TestBase {
 public void testGroupCreation() throws Exception {
   app.goTo().groupPage();
   List<GroupData> before = app.group().list();
-  GroupData group = new GroupData("sart2", null, null);
+  GroupData group = new GroupData().withName("sart2");
   app.group().create(group);
   app.getSessionHelper().logout();
   List<GroupData> after = app.group().list();
