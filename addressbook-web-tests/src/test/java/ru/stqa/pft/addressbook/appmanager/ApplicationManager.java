@@ -47,4 +47,12 @@ public class ApplicationManager {
   public SessionHelper getSessionHelper() {
     return sessionHelper;
   }
+
+  public GroupHelper getGroupHelper() {
+    return groupHelper;
+  }
+
+  public NavigationHelper getNavigationHelper() {
+    return navigationHelper;
+  }
 }
