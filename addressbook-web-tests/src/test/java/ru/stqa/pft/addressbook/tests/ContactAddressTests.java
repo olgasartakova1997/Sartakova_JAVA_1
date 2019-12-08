@@ -23,7 +23,7 @@ public class ContactAddressTests extends TestBase{
       }
       app.goTo().homePage();
       ContactData contact = new ContactData()
-              .withFirstName("Olga").withLastName("Sartakova").withAddress("NSK").withEmail("sartakova@jfhbdjf.ru").withHomePhone("+3832658947").withGroup("sart1");
+              .withFirstName("Olga").withLastName("Sara").withAddress("NSK").withEmail("sartakova@jfhbdjf.ru").withHomePhone("+3832658947").withGroup("sart1");
       app.contact().create(contact, true);
       app.goTo().homePage();
     }

@@ -22,7 +22,7 @@ public class ContactPhoneTests extends TestBase {
       }
       app.goTo().homePage();
       ContactData contact = new ContactData()
-              .withFirstName("Olga").withLastName("Sartakova").withAddress("NSK").withEmail("sartakova236@bhcj.ru").withHomePhone("+7383659847").withMobilePhone("963258147").withWorkPhone("952369874").withGroup("sart1");
+              .withFirstName("Olga").withLastName("Sara").withAddress("NSK").withEmail("sartakova236@bhcj.ru").withHomePhone("+7383659847").withMobilePhone("963258147").withWorkPhone("952369874").withGroup("sart1");
       app.contact().create(contact, true);
       app.goTo().homePage();
     }

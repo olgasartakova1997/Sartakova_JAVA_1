@@ -18,7 +18,7 @@ public class ContactGroupCreation extends TestBase {
     app.goTo().homePage();
     Contacts before = app.contact().all();
     ContactData contact = new ContactData()
-            .withFirstName("Olga").withLastName("Sartakova").withAddress("Novosibirsk").withEmail("sartakovaa@yandex.com").withHomePhone("9625854854").withGroup("sart1");
+            .withFirstName("Olga").withLastName("Sara").withAddress("NSK").withEmail("sartakovaa@yandex.com").withHomePhone("9625854854").withGroup("sart1");
     app.contact().create(contact, true);
     app.goTo().homePage();
     assertThat(app.contact().count(), equalTo(before.size() + 1));
