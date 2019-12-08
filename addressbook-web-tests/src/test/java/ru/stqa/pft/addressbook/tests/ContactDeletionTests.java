@@ -1,36 +1,41 @@
 package ru.stqa.pft.addressbook.tests;
-
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.Comparator;
-import java.util.List;
-
-public class ContactDeletionTests extends TestBase{
-
+public class ContactDeletionTests extends TestBase {
   @BeforeMethod
   public void ensurePrecondition() {
-    app.goTo().gotoContactList();
-    if ((app.contactHelper().all().size() == 0)) {
-      app.contactHelper().createContact(new ContactData().withFirstName("gdfgb").withMiddleName("fdbdsf").
-              withLastName("khgfgbdf").withNickname("dfvxf").withMobilePhone("3344499"), true);
+    if (app.contact().all().size() != 0) {
+      return;
+    } else {
+      app.goTo().groupPage();
+      //если гуппы нет - создаем:
+      if (app.group().all().size() == 0) {
+        app.group().create(new GroupData().withName("test1"));
+      }
+      //создаем контакт
+      app.goTo().homePage();
+      ContactData contact = new ContactData()
+              .withFirstName("Svetlana").withLastName("Delete").withAddress("Novosibirsk").withEmail("snoskova07@gmail.com").withHomePhone("7654321").withGroup("test1");
+      app.contact().create(contact, true);
+      app.goTo().homePage();
     }
   }
-    @Test
-    public void testContactDeleted() {
-      Contacts before = app.contactHelper().all();
-      ContactData deletedContact = before.iterator().next();
-      app.contactHelper().deletedContact(deletedContact);
-      app.contactHelper().alertAccept();
-      app.goTo().gotoContactList();
-      Contacts after = app.contactHelper().all();
-      Assert.assertEquals(after.size(), before.size() - 1);
-
-      assertThat(after, equalTo(before.withOut(deletedContact)));
-    }
+  @Test
+  public void testContactDeletion() throws InterruptedException {
+    //формируем список before до удаления
+    Contacts before = app.contact().all();
+    ContactData deletedContact = before.iterator().next();
+    app.contact().delete(deletedContact);
+    assertThat(app.contact().count(), equalTo(before.size() - 1));
+    Contacts after = app.contact().all();
+    // before.remove(deletedContact);
+    // Assert.assertEquals(before, after);
+    //проверка
+    assertThat(after, equalTo(before.without(deletedContact)));
   }
+}

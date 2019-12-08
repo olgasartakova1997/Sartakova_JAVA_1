@@ -1,26 +1,30 @@
 package ru.stqa.pft.addressbook.tests;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 public class ContactGroupCreation extends TestBase {
-  @Test
-
-    public void testContactCreate() throws Exception {
-    app.goTo().gotoContactList();
-    Contacts before = app.contactHelper().all();
-    ContactData contact = new ContactData().withFirstName("sartasarta").withLastName("olyaolya").
-            withMiddleName("EVG").withNickname("saranaboy").withMobilePhone("964216245");
-    app.contactHelper().createContact(contact, true);
-    Contacts after = app.contactHelper().all();
-    Assert.assertEquals(after.size(), before.size() + 1);
-
-    //after.remove(contact);
-    assertThat(after, equalTo(before.withAdded
-            (contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+  @BeforeMethod
+  public void ensurePreconditions() {
+    app.goTo().groupPage();
+    if (app.group().all().size() == 0) {
+      app.group().create(new GroupData().withName("test1"));
     }
   }
-
+  @Test
+  public void testContactCreation() throws Exception {
+    app.goTo().homePage();
+    Contacts before = app.contact().all();
+    ContactData contact = new ContactData()
+            .withFirstName("Olga").withLastName("Sartakova").withAddress("Novosibirsk").withEmail("sartakovaa@yandex.com").withHomePhone("9625854854").withGroup("test1");
+    app.contact().create(contact, true);
+    app.goTo().homePage();
+    assertThat(app.contact().count(), equalTo(before.size() + 1));
+    Contacts after = app.contact().all();
+//проверка
+    assertThat(after, equalTo(
+            before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
+  }
+}

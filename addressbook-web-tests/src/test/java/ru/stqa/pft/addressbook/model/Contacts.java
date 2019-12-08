@@ -4,7 +4,7 @@ import com.google.common.collect.ForwardingSet;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Contacts extends ForwardingSet<ContactData> {
+public class Contacts extends ForwardingSet<ContactData>{
 
   private Set<ContactData> delegate;
 
@@ -13,7 +13,7 @@ public class Contacts extends ForwardingSet<ContactData> {
   }
 
   public Contacts() {
-    this.delegate = new HashSet<>();
+    this.delegate = new HashSet<ContactData>();
   }
 
   @Override
@@ -27,7 +27,7 @@ public class Contacts extends ForwardingSet<ContactData> {
     return contacts;
   }
 
-  public Contacts withOut(ContactData contact) {
+  public Contacts without(ContactData contact) {
     Contacts contacts = new Contacts(this);
     contacts.remove(contact);
     return contacts;
