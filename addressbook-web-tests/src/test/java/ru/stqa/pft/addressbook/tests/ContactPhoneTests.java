@@ -18,7 +18,7 @@ public class ContactPhoneTests extends TestBase {
     } else {
       app.goTo().groupPage();
       if (app.group().all().size() == 0) {
-        app.group().create(new GroupData().withName("test1"));
+        app.group().create(new GroupData().withName("sart1"));
       }
       app.goTo().homePage();
       ContactData contact = new ContactData()

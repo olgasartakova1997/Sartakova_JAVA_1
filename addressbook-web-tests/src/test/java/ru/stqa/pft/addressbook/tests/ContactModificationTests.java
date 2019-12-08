@@ -16,11 +16,11 @@ public class ContactModificationTests extends TestBase {
     } else {
       app.goTo().groupPage();
       if (app.group().all().size() == 0) {
-        app.group().create(new GroupData().withName("test1"));
+        app.group().create(new GroupData().withName("sart1"));
       }
       app.goTo().homePage();
       ContactData contact = new ContactData()
-              .withFirstName("Svetlana").withLastName("Noskova").withAddress("Novosibirsk").withEmail("snoskova07@gmail.com").withHomePhone("7654321").withGroup("test1");
+              .withFirstName("olga").withLastName("sartakova").withAddress("NSK").withEmail("dfhjbkdjf@hjcf.ru").withHomePhone("68585623563").withGroup("sart1");
       app.contact().create(contact, true);
       app.goTo().homePage();
     }
