@@ -3,9 +3,11 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
+import java.io.File;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 public class ContactGroupCreation extends TestBase {
+
   @BeforeMethod
   public void ensurePreconditions() {
     app.goTo().groupPage();
@@ -23,8 +25,17 @@ public class ContactGroupCreation extends TestBase {
     app.goTo().homePage();
     assertThat(app.contact().count(), equalTo(before.size() + 1));
     Contacts after = app.contact().all();
-//проверка
+
     assertThat(after, equalTo(
             before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
+  }
+  @Test
+  public void testContactCreationWithPhoto() throws Exception {
+    app.goTo().homePage();
+    File photo = new File("src/test/resources/stru.jpg");
+    ContactData contact = new ContactData()
+            .withFirstName("Olga").withLastName("Sartakova").withPhoto(photo).withGroup("sart1");
+    app.contact().create(contact, true);
+    app.goTo().homePage();
   }
 }
