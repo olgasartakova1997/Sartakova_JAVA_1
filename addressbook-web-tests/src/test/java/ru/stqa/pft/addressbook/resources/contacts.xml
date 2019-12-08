@@ -1,0 +1,40 @@
+<list>
+  <contact>
+    <firstName>Olga 0</firstName>
+    <lastName>Sara 0</lastName>
+    <address>NSK 0</address>
+    <email>sartakova10@bhcj.ru</email>
+    <home>20200</home>
+    <mobile>02580</mobile>
+    <work>01470</work>
+    <email2>sartakova20@bhcj.ru</email2>
+    <email3>sartakova30@bhcj.ru</email3>
+    <group>sart 0</group>
+  </contact>
+  <contact>
+    <contact>
+    <firstName>Olga 1</firstName>
+    <lastName>Sara 1</lastName>
+    <address>NSK 1</address>
+    <email>sartakova11@bhcj.ru</email>
+    <home>20201</home>
+    <mobile>02581</mobile>
+    <work>01471</work>
+    <email2>sartakova21@bhcj.ru</email2>
+    <email3>sartakova31@bhcj.ru</email3>
+    <group>sart 1</group>
+   </contact>
+  <contact>
+ <contact>
+    <firstName>Olga 2</firstName>
+    <lastName>Sara 2</lastName>
+    <address>NSK 2</address>
+    <email>sartakova12@bhcj.ru</email>
+    <home>20202</home>
+    <mobile>02582</mobile>
+    <work>01472</work>
+    <email2>sartakova22@bhcj.ru</email2>
+    <email3>sartakova32@bhcj.ru</email3>
+    <group>sart 2</group>
+  </contact>
+</list> 
