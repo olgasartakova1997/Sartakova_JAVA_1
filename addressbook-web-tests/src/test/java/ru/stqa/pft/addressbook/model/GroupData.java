@@ -9,7 +9,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @XStreamAlias("group")
 
@@ -25,6 +28,13 @@ public class GroupData {
   @Expose
   @Column(name = "group_name")
   private String name;
+
+  @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER)
+  private Set<ContactData> contacts = new HashSet<ContactData>();
+
+  public Contacts getContacts() {
+    return new Contacts(contacts);
+  }
 
   @Override
   public boolean equals(Object o) {

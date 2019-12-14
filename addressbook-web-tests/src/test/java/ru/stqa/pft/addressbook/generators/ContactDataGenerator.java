@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.tests.TestBase;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,7 +16,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactDataGenerator {
+public class ContactDataGenerator extends TestBase {
   @Parameter(names = "-c", description = "Contact count")
   public int count;
 
@@ -88,8 +89,7 @@ public class ContactDataGenerator {
               .withEmail3(String.format("sar3%s@yandex.ru", i))
               .withHomePhone(String.format("2885%s", i))
               .withMobilePhone(String.format("6525%s", i))
-              .withWorkPhone(String.format("4855%s", i))
-              .withGroup(String.format("sart %s", i)));
+              .withWorkPhone(String.format("4855%s", i)));
     }
     return contacts;
   }

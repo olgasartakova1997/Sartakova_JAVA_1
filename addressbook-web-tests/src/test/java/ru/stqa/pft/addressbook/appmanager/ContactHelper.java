@@ -1,16 +1,20 @@
 package ru.stqa.pft.addressbook.appmanager;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
+
 import java.util.List;
 public class ContactHelper extends HelperBase {
   public ContactHelper(WebDriver wd) {
     super(wd);
   }
+
   public void fillContactForm(ContactData contactData, boolean creation) {
     type(By.name("firstname"), contactData.getFirstName());
     type(By.name("lastname"), contactData.getLastName());
@@ -24,7 +28,11 @@ public class ContactHelper extends HelperBase {
     attach(By.name("photo"), contactData.getPhoto());
 
     if (creation) {
-      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      if (contactData.getGroups().size() > 0) {
+        Assert.assertTrue(contactData.getGroups().size() == 1);
+        new Select(wd.findElement(By.name("new_group")))
+                .selectByVisibleText(contactData.getGroups().iterator().next().getName());
+      }
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
@@ -68,6 +76,7 @@ public class ContactHelper extends HelperBase {
   public boolean isThereAContact() {
     return isElementPresent(By.name("selected[]"));
   }
+
   public void modify(ContactData contactData, boolean b) {
     fillContactForm(contactData, false);
     submitContactModification();
@@ -104,6 +113,7 @@ public class ContactHelper extends HelperBase {
   public int count() {
     return wd.findElements(By.name("selected[]")).size();
   }
+
   public ContactData infoFromEditForm(ContactData contact) {
     initContactModificationById(contact.getId());
     String firstName = wd.findElement(By.name("firstname")).getAttribute("value");
@@ -121,5 +131,29 @@ public class ContactHelper extends HelperBase {
             .withAddress(address)
             .withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work)
             .withEmail(email).withEmail2(email2).withEmail3(email3);
+  }
+  public void addContactToGroupAfterSelect(GroupData selectedGroup) {
+    String id = String.valueOf(selectedGroup.getId());
+    new Select(wd.findElement(By.name("to_group"))).selectByValue(id);
+  }
+
+  public void addInGroupFinal(ContactData selectedContact, GroupData selectedGroup) {
+    selectContactById(selectedContact.getId());
+    addContactToGroupAfterSelect(selectedGroup);
+  }
+
+  public void deleteFromGroupFinal(ContactData contact, GroupData group) {
+    String id = String.valueOf(group.getId());
+    new Select(wd.findElement(By.name("group"))).selectByValue(id);
+    selectContactById(contact.getId());
+    deleteContactFromGroupAfterSelect();
+  }
+
+  private void deleteContactFromGroupAfterSelect() {
+    click(By.name("remove"));
+  }
+
+  public void allGroupsInContactPage() {
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText("[all]");
   }
 }
