@@ -3,6 +3,8 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../addressbook-web-tests">
+      <sourceFolder url="file://$MODULE_DIR$/../../addressbook-web-tests" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../addressbook-web-tests" />
       <excludeFolder url="file://$MODULE_DIR$/../../addressbook-web-tests/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../addressbook-web-tests/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../addressbook-web-tests/gradle/.gradle" />

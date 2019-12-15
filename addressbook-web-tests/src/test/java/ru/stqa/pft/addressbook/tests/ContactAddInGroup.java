@@ -72,4 +72,3 @@ public class ContactAddInGroup extends TestBase {
       assertThat(selectedContact.getGroups(), equalTo(contactAfter.getGroups().without(selectedGroup)));
     }
   }
-}
