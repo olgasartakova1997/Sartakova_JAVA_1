@@ -61,7 +61,7 @@ public class ContactData {
   @Transient
   private String allEmails;
   @Expose
-  //@Transient
+  @Transient
   private String group;
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name ="address_in_groups"
