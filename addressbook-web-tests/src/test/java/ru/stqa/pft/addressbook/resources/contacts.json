@@ -1,38 +1,23 @@
 [
   {
-    "firstName": "Olga 0",
-    "lastName": "Sartakova 0",
-    "address": "NSK 0",
-    "email": "sar10@yandex.ru",
-    "home": "28850",
-    "mobile": "65250",
-    "work": "48550",
-    "email2": "sar20@yandex.ru",
-    "email3": "sar30@yandex.ru",
-    "group": "sart 0"
+    "firstName": "testFirstName 0",
+    "lastName": "testLastName 0",
+    "middleName": "testMiddleName 0",
+    "mobilePhone": "testLastName 0",
+    "email": "testEmail 0"
   },
   {
-    "firstName": "Olga 1",
-    "lastName": "Sartakova 1",
-    "address": "NSK 1",
-    "email": "sar11@yandex.ru",
-    "home": "28851",
-    "mobile": "65251",
-    "work": "48551",
-    "email2": "sar21@yandex.ru",
-    "email3": "sar31@yandex.ru",
-    "group": "sart 1"
+    "firstName": "testFirstName 2",
+    "lastName": "testLastName 2",
+    "middleName": "testMiddleName 2",
+    "mobilePhone": "testLastName 2",
+    "email": "testEmail 2"
   },
   {
-    "firstName": "Olga 2",
-    "lastName": "Sartakova 2",
-    "address": "NSK 2",
-    "email": "sar12@yandex.ru",
-    "home": "28852",
-    "mobile": "65252",
-    "work": "48552",
-    "email2": "sar22@yandex.ru",
-    "email3": "sar32@yandex.ru",
-    "group": "sart 2"
+    "firstName": "testFirstName 3",
+    "lastName": "testLastName 3",
+    "middleName": "testMiddleName 3",
+    "mobilePhone": "testLastName 3",
+    "email": "testEmail 3"
   }
 ]

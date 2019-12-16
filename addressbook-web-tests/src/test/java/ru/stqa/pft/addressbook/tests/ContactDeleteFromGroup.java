@@ -7,73 +7,40 @@ import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
-import java.util.Set;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertEquals;
 
-public class ContactDeleteFromGroup extends TestBase {
+public class ContactDeleteFromGroup extends TestBase{
 
   @BeforeMethod
   public void ensurePreconditions() {
-    if (app.db().contacts().size() == 0 ) {
-      app.goTo().homePage();
-      app.contact().create(new ContactData()
-              .withFirstName("Olga").withLastName("Sartakova").withMobilePhone("945545454")
-              .withEmail("osartakova@yandex.ru"), true);
+    if (app.db().contacts().size() == 0) {
+      app.getNavigationHelper().homePage();
+      app.contactHelper().createContact(new ContactData().withFirstName("qwdqw221").withMiddleName("1212").
+              withLastName("lastLol").withNickname("nikLol").withMobilePhone("548568719"), true);
     }
-    if (app.db().groups().size() == 0 ){
-      app.goTo().groupPage();
-      app.group().create(new GroupData().withName("test1").withFooter("footer1").withHeader("header1"));
+    if (app.db().groups().size() == 0) {
+      app.getNavigationHelper().groupPage();
+      app.getGroupHelper().create(new GroupData().withName("test21"));
     }
-
   }
-    @Test
-  public void testContactDeleteFromGroup() {
-    ContactData contactAfter = null;
-    ContactData contactBefore = null;
-    GroupData selectedGroup = null;
-    ContactData selectedContact = null;
-    Groups groups = app.db().groups();
-    Contacts Allcontacts = app.db().contacts();
-    selectedContact= Allcontacts.iterator().next(); //случайный контакт для случай (selectedContact.getGroups().size() == 0)
 
-    for (ContactData oneOfContactToDelete : Allcontacts) {
-      Groups groupsOfContactToDelete = oneOfContactToDelete.getGroups();
-      if (groupsOfContactToDelete.size() > 0) {
-        selectedContact = oneOfContactToDelete;
-        selectedGroup = selectedContact.getGroups().iterator().next(); //можно дальше не искать
-        break;
-      }
-    }
-    if (selectedContact.getGroups().size() == 0) {
-      selectedGroup = groups.iterator().next(); //берем рандомную группу. И далее она будет единственная с включеным контактом. Можно заново не искать.
-      app.contact().addInGroupFinal(selectedContact, selectedGroup);
-    }
-
-      Contacts allContactsBefore = app.db().contacts(); // обновили т.к contactBefore = selectedContact но без ID группы.
-      for (ContactData OneOfContactBefore : allContactsBefore) {
-        if (OneOfContactBefore.getId() == selectedContact.getId()) {
-          contactBefore = OneOfContactBefore;
-          break;
+  @Test
+  public void testContactDeleteGroup() {
+    ContactData contactBefore = app.db().contacts().iterator().next();
+    if (contactBefore.getGroups() != null) {
+      Groups groupsBefore = contactBefore.getGroups();
+      app.contactHelper().removeFromGroup(contactBefore);
+      Contacts contactsAfter = app.db().contacts();
+      for (ContactData contactAfter : contactsAfter) {
+        if (contactAfter.getId() == contactBefore.getId()) {
+          Groups groupsAfter = contactAfter.getGroups();
+          assertThat(groupsAfter.size(), equalTo(groupsBefore.size() - 1));
+          groupsBefore.removeAll(groupsAfter);
+          assertThat(groupsAfter, equalTo(
+                  contactBefore.getGroups().withOut(groupsBefore.iterator().next())));
         }
       }
-      app.goTo().homePage();
-
-      app.contact().deleteFromGroupFinal(selectedContact, selectedGroup);
-
-      // получаем данные для сравнения после
-
-      Contacts allContactsAfter = app.db().contacts(); //еще раз обновили
-      for (ContactData OneOfContactAfter : allContactsAfter) {
-        if (OneOfContactAfter.getId() == selectedContact.getId()) {
-          contactAfter = OneOfContactAfter;
-          break;
-        }
-      }
-      //проверки
-      assertEquals(contactBefore.getGroups().size(), contactAfter.getGroups().size() + 1);
-      assertThat(contactBefore.getGroups(), equalTo(contactAfter.getGroups().withAdded(selectedGroup)));
     }
+  }
 }
