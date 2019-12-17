@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ru.stqa.pft.soap.GeoIpServiceTests" tests="2" skipped="0" failures="1" errors="0" timestamp="2019-12-17T13:33:40" hostname="Admin-PC" time="4.626">
+<testsuite name="ru.stqa.pft.soap.GeoIpServiceTests" tests="2" skipped="0" failures="1" errors="0" timestamp="2019-12-17T14:04:49" hostname="Admin-PC" time="4.287">
   <properties/>
-  <testcase name="testInvalidIp" classname="ru.stqa.pft.soap.GeoIpServiceTests" time="3.875">
+  <testcase name="testInvalidIp" classname="ru.stqa.pft.soap.GeoIpServiceTests" time="3.849">
     <failure message="java.lang.AssertionError: expected:&lt;&lt;GeoIP&gt;&lt;Country&gt;US&lt;/Country&gt;&lt;State&gt;CA&lt;/State&gt;&lt;/GeoIP&gt;&gt; but was:&lt;&lt;GeoIP&gt;&lt;Country&gt;RU&lt;/Country&gt;&lt;State&gt;47&lt;/State&gt;&lt;/GeoIP&gt;&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;&lt;GeoIP&gt;&lt;Country&gt;US&lt;/Country&gt;&lt;State&gt;CA&lt;/State&gt;&lt;/GeoIP&gt;&gt; but was:&lt;&lt;GeoIP&gt;&lt;Country&gt;RU&lt;/Country&gt;&lt;State&gt;47&lt;/State&gt;&lt;/GeoIP&gt;&gt;
 	at org.testng.AssertJUnit.assertEquals(AssertJUnit.java:82)
 	at org.testng.AssertJUnit.assertEquals(AssertJUnit.java:87)
@@ -61,7 +61,7 @@
 	at java.lang.Thread.run(Thread.java:748)
 </failure>
   </testcase>
-  <testcase name="testMyIp" classname="ru.stqa.pft.soap.GeoIpServiceTests" time="0.7"/>
+  <testcase name="testMyIp" classname="ru.stqa.pft.soap.GeoIpServiceTests" time="0.386"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
