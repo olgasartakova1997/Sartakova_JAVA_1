@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.tests.TestBase;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,7 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactDataGenerator extends TestBase {
+public class ContactDataGenerator {
   @Parameter(names = "-c", description = "Contact count")
   public int count;
 
@@ -28,7 +27,7 @@ public class ContactDataGenerator extends TestBase {
 
   public static void main(String[] args) throws IOException {
     ContactDataGenerator generator = new ContactDataGenerator();
-    JCommander jCommander  = new JCommander(generator);
+    JCommander jCommander = new JCommander(generator);
     try {
       jCommander.parse(args);
     } catch (ParameterException ex) {
@@ -46,8 +45,7 @@ public class ContactDataGenerator extends TestBase {
       saveAsXml(contacts, new File(file));
     } else if (format.equals("json")) {
       saveAsJson(contacts, new File(file));
-    }
-    else {
+    } else {
       System.out.println("Unrecognized file format" + format);
     }
   }
@@ -77,19 +75,21 @@ public class ContactDataGenerator extends TestBase {
       }
     }
   }
+
   private List<ContactData> generateContacts(int count) {
     List<ContactData> contacts = new ArrayList<ContactData>();
-    for (int i=0; i<count; i++ ) {
+    for (int i = 0; i < count; i++) {
       contacts.add(new ContactData()
               .withFirstName(String.format("Olga %s", i))
-              .withLastName(String.format("Sartakowa %s", i))
+              .withLastName(String.format("Sartakova %s", i))
               .withAddress(String.format("NSK %s", i))
-              .withEmail(String.format("sar1%s@yandex.ru", i))
-              .withEmail2(String.format("sar2%s@yandex.ru", i))
-              .withEmail3(String.format("sar3%s@yandex.ru", i))
+              .withEmail(String.format("sar1%s@mail.com", i))
+              .withEmail2(String.format("sar2%s@mail.com", i))
+              .withEmail3(String.format("sar3%s@mail.com", i))
               .withHomePhone(String.format("2885%s", i))
               .withMobilePhone(String.format("6525%s", i))
               .withWorkPhone(String.format("4855%s", i)));
+      //       .withGroup(String.format("test %s", i)));
     }
     return contacts;
   }

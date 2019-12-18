@@ -1,10 +1,13 @@
 package ru.stqa.pft.addressbook.tests;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.XStream;
-import org.testng.annotations.*;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,9 +15,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 public class GroupCreationTests2 extends TestBase {
+
   @DataProvider
   public Iterator<Object[]> validGroupsFromXml() throws IOException {
     try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.xml")))) {
@@ -27,9 +33,10 @@ public class GroupCreationTests2 extends TestBase {
       XStream xstream = new XStream();
       xstream.processAnnotations(GroupData.class);
       List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml);
-      return groups.stream().map((q) -> new Object[]{q}).collect(Collectors.toList()).iterator();
+      return groups.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
   }
+
   @DataProvider
   public Iterator<Object[]> validGroupsFromJson() throws IOException {
     try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.json")))) {
@@ -40,31 +47,33 @@ public class GroupCreationTests2 extends TestBase {
         line = reader.readLine();
       }
       Gson gson = new Gson();
-      List<GroupData> groups = gson.fromJson(json, new TypeToken<List<GroupData>>() {
-      }.getType());
-      return groups.stream().map((q) -> new Object[]{q}).collect(Collectors.toList()).iterator();
+      List<GroupData> groups = gson.fromJson(json, new TypeToken<List<GroupData>>() {}.getType()); // aka List GroupData.class
+      return groups.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
   }
 
   @Test(dataProvider = "validGroupsFromJson")
-  public void testGroupCreation(GroupData group) {
+  public void testGroupCreation(GroupData group) throws Exception {
+    app.goTo().groupPage();
     Groups before = app.db().groups();
-    app.getNavigationHelper().groupPage();
-    app.getGroupHelper().create(group);
-    assertThat(app.getGroupHelper().count(), equalTo(before.size() + 1));
-    Groups after = app.db().groups();
-
-    assertThat(after, equalTo(before.withAdded
-            (group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+    app.group().create(group);
+    //хеширование - предварительная проверка при помощи более быстрой операции
+    assertThat(app.group().count(), equalTo(before.size() + 1));
+    Groups after = app.db().groups();;
+    //проверка
+    assertThat(after, equalTo(
+            before.withAdded(group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
   }
-  @Test(enabled = false)
-  public void testBadGroupCreation() {
-    app.getNavigationHelper().groupPage();
-    Groups before = app.db().groups();
-    GroupData group = new GroupData().withName("test2`");
-    app.getGroupHelper().create(group);
-    assertThat(app.getGroupHelper().count(), equalTo(before.size()));
-    Groups after = app.db().groups();
+
+  @Test
+  public void testBadGroupCreation() throws Exception {
+    app.goTo().groupPage();
+    Groups before = app.db().groups();;
+    GroupData group = new GroupData().withName("test2'");
+    app.group().create(group);
+    assertThat(app.group().count(), equalTo(before.size()));
+    Groups after = app.db().groups();;
+    //проверка, что группа не создается
     assertThat(after, equalTo(before));
   }
 }

@@ -1,5 +1,4 @@
-apply plugin: 'java'
-apply plugin: 'application'
+apply plugin:'java'
 test {
     useTestNG()
 }
@@ -7,15 +6,15 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    compile 'org.testng:testng:6.14.3'
-    compile 'org.seleniumhq.selenium:selenium-java:3.141.59'
-    compile 'org.hamcrest:hamcrest:2.2'
+    compile 'org.testng:testng:7.0.0'
+    compile 'org.seleniumhq.selenium:selenium-java:4.0.0-alpha-3'
+    compile 'org.hamcrest:java-hamcrest:2.0.0.0'
     compile 'com.beust:jcommander:1.78'
     compile 'com.thoughtworks.xstream:xstream:1.4.11.1'
     compile 'com.google.code.gson:gson:2.8.6'
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile 'mysql:mysql-connector-java:5.1.38'
-    compile 'org.hibernate:hibernate-core:5.1.0.Final'
+    compile 'mysql:mysql-connector-java:5.1.48'
+    compile 'org.hibernate:hibernate-core:5.4.9.Final'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
 }
 task testGroups(type: Test) {
     useTestNG {
@@ -27,7 +26,6 @@ task testGroups(type: Test) {
     if (project.hasProperty('target')) {
         systemProperty 'target', "${target}"
     }
-
     if (project.hasProperty('verifyUI')) {
         systemProperty 'verifyUI', "${verifyUI}"
     }
@@ -43,7 +41,6 @@ task testContacts(type: Test) {
     if (project.hasProperty('target')) {
         systemProperty 'target', "${target}"
     }
-
     if (project.hasProperty('verifyUI')) {
         systemProperty 'verifyUI', "${verifyUI}"
     }
