@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Suite3" verbose="1" >
+    <test name="All">
+        <classes>
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.ContactModificationTests"/>
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.ContactGroupCreation"/>
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.ContactDeletionTests"/>
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.GroupCreationTests2" />
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.GroupDeletionTests" />
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.GroupModificationTests" />
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.ContactAddInGroup" />
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.RemoveContactFromGroupTests" />
+            <class name="ru.stqa.pft.addressbook.appmanager.tests.DbConnectionTest" />
+        </classes>
+    </test>
+</suite>

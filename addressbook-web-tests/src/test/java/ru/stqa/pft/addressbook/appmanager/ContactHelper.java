@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Sleeper;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
@@ -92,6 +93,7 @@ public class ContactHelper extends HelperBase {
   }
 
   public void delete(ContactData contact) throws InterruptedException {
+    app.contact().allGroupsInContactPage();
     selectContactById(contact.getId());
     deleteSelectedContacts();
     contactCache = null;
