@@ -93,7 +93,6 @@ public class ContactHelper extends HelperBase {
   }
 
   public void delete(ContactData contact) throws InterruptedException {
-    app.contact().allGroupsInContactPage();
     selectContactById(contact.getId());
     deleteSelectedContacts();
     contactCache = null;

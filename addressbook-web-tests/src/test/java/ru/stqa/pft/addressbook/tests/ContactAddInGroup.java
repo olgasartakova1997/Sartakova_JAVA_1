@@ -7,7 +7,7 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
-
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactAddInGroup extends TestBase {
@@ -38,15 +38,26 @@ public class ContactAddInGroup extends TestBase {
 
   @Test
   public void testAddContactToGroup() {
+    // Список до манипуляций
     Groups groups = app.db().groups();
+
     Contacts contactsDB = app.db().contacts();
     ContactData contactWithoutGroup = app.contact().findContactWithoutGroup(contactsDB);
+
+    Groups groupsBefore = contactWithoutGroup.getGroups();
+
     int contactId = contactWithoutGroup.getId();
     GroupData selectedGroup = groups.iterator().next();
     app.contact().addContactToGroup(contactWithoutGroup.getId(), selectedGroup.getId());
 
     Contacts contactAfter = app.db().getContactById(contactId);
     ContactData contactWithGroup = contactAfter.iterator().next();
-    assertThat(contactWithGroup, CoreMatchers.equalTo(contactWithoutGroup.inGroup(selectedGroup)));
+
+    // Список после манипуляций
+    Groups groupsAfter = contactWithGroup.getGroups();
+
+    //assertThat(contactWithGroup, CoreMatchers.equalTo(contactWithoutGroup.inGroup(selectedGroup)));
+
+    assertThat(groupsAfter, equalTo(groupsBefore.withAdded(selectedGroup)));
   }
 }

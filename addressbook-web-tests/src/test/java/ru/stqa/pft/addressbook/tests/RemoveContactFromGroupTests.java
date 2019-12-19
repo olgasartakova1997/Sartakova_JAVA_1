@@ -7,7 +7,7 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
-
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RemoveContactFromGroupTests extends TestBase {
@@ -39,20 +39,26 @@ public class RemoveContactFromGroupTests extends TestBase {
     }
   }
 
-  @Test
   public void testRemoveContactFromGroup() {
     Contacts contacts = app.db().contacts();
+
     ContactData contactWithGroup = app.contact().findContactWithGroup(contacts);
     int contactId = contactWithGroup.getId();
+
+    Groups groupsBefore = contactWithGroup.getGroups();
+
     GroupData group = contactWithGroup.getGroups().iterator().next();
-    int groupId = group.getId();
-    Groups deletedGroup = app.db().getGroupById(groupId);
-    GroupData deletedGroupData = deletedGroup.iterator().next();
-    app.contact().filterByGroup(groupId);
+    app.contact().filterByGroup(group.getId());
     app.contact().removeContactFromGroup(contactWithGroup.getId(), group.getId());
 
     Contacts contactAfter = app.db().getContactById(contactId);
+
     ContactData contactWithoutGroup = contactAfter.iterator().next();
-    assertThat(contactWithGroup, CoreMatchers.equalTo(contactWithoutGroup.inGroup(deletedGroupData)));
+
+    Groups groupsAfter = contactWithoutGroup.getGroups();
+
+    //assertThat(contactWithGroup, CoreMatchers.equalTo(contactWithoutGroup.inGroup(deletedGroupData)));
+
+    assertThat(groupsBefore, equalTo(groupsAfter.withAdded(group)));
   }
 }
