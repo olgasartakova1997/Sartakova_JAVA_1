@@ -9,38 +9,42 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import ru.stqa.pft.addressbook.appmanager.SessionHelper;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+
 public class ApplicationManager {
   private final Properties properties;
   WebDriver wd;
+
   private SessionHelper sessionHelper;
   private NavigationHelper navigationHelper;
   private GroupHelper groupHelper;
   private ContactHelper contactHelper;
   private String browser;
   private DbHelper dbHelper;
+
   public ApplicationManager(String browser) {
     this.browser = browser;
     properties = new Properties();
   }
+
   public void init() throws IOException {
     String target = System.getProperty("target", "local");
     properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
+
     dbHelper = new DbHelper();
+
     if ("".equals(properties.getProperty("selenium.server"))) {
-      if (browser.equals(BrowserType.FIREFOX)) {
-        wd = new FirefoxDriver();
-      } else if(browser.equals(BrowserType.CHROME)) {
+      if (browser.equals(BrowserType.CHROME)) {
         wd = new ChromeDriver();
-      } else if (browser.equals(BrowserType.IE)){
+      } else if (browser.equals(BrowserType.FIREFOX)) {
+        wd = new FirefoxDriver();
+      } else if (browser.equals(BrowserType.IE)) {
         wd = new InternetExplorerDriver();
       }
     } else {
@@ -49,28 +53,38 @@ public class ApplicationManager {
       capabilities.setPlatform(Platform.fromString(System.getProperty("platform", "win10")));
       wd = new RemoteWebDriver(new URL(properties.getProperty("selenium.server")), capabilities);
     }
-    wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    wd.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
     wd.get(properties.getProperty("web.baseUrl"));
-    sessionHelper = new SessionHelper((WebDriver) this);;
+    groupHelper = new GroupHelper(wd);
+    navigationHelper = new NavigationHelper(wd);
+    sessionHelper = new SessionHelper(wd);
     sessionHelper.login(properties.getProperty("web.adminLogin"), properties.getProperty("web.adminPassword"));
-    navigationHelper = new NavigationHelper((WebDriver) this);
-    groupHelper = new GroupHelper((WebDriver) this);
-    contactHelper = new ContactHelper((WebDriver) this);
+    contactHelper = new ContactHelper(wd);
   }
+
   public void stop() {
-    sessionHelper.logout();
     wd.quit();
   }
-  public ContactHelper contact() {
-    return contactHelper;
-  }
-  public GroupHelper group() {
+
+  public GroupHelper getGroupHelper() {
     return groupHelper;
   }
-  public NavigationHelper goTo() {
+
+  public NavigationHelper getNavigationHelper() {
     return navigationHelper;
   }
+
+  public ContactHelper contactHelper() {
+    return contactHelper;
+  }
+
+  public SessionHelper getSessionHelper() {
+    return sessionHelper;
+  }
+
   public DbHelper db() {
     return dbHelper;
   }
+
+
 }

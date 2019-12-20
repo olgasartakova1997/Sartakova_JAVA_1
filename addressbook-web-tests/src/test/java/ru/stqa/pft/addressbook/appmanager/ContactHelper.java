@@ -4,14 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Sleeper;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
-import java.util.Set;
 
 public class ContactHelper extends HelperBase {
 
@@ -19,33 +17,34 @@ public class ContactHelper extends HelperBase {
     super(wd);
   }
 
-  public void fillContactForm(ContactData contactData, boolean creation) {
+  public void createContact(ContactData contactData, boolean creation) {
+    click(By.linkText("add new"));
     type(By.name("firstname"), contactData.getFirstName());
+    type(By.name("middlename"), contactData.getMiddleName());
     type(By.name("lastname"), contactData.getLastName());
-    type(By.name("address"), contactData.getAddress());
     type(By.name("home"), contactData.getHomePhone());
     type(By.name("mobile"), contactData.getMobilePhone());
     type(By.name("work"), contactData.getWorkPhone());
     type(By.name("email"), contactData.getEmail());
-    type(By.name("email2"), contactData.getEmail2());
-    type(By.name("email3"), contactData.getEmail3());
     attach(By.name("photo"), contactData.getPhoto());
+    selectType(By.name("bday"), contactData.getDay());
+    selectType(By.name("bmonth"), contactData.getMonth());
+    type(By.name("byear"), contactData.getYear());
+    click(By.name("submit"));
+    click(By.linkText("home page"));
 
     if (creation) {
       if (contactData.getGroups().size() > 0) {
         Assert.assertTrue(contactData.getGroups().size() == 1);
-        new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
+        new Select(wd.findElement(By.name("new_group")))
+                .selectByVisibleText(contactData.getGroups().iterator().next().getName());
+      } else {
+        Assert.assertFalse(isElementPresent(By.name("new_group")));
       }
-    } else {
-      Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
   }
 
-  public void submitAddAddressForm() {
-    click(By.xpath("(//input[@name='submit'])[2]"));
-  }
-
-  public void clickAddNewContact() {
+  public void initCreateNewContact() {
     click(By.linkText("add new"));
   }
 
@@ -57,157 +56,138 @@ public class ContactHelper extends HelperBase {
     wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
   }
 
-  public void initContactModification(int index) {
-    wd.findElements(By.xpath("//img[@title='Edit']")).get(index).click();
-  }
-
-  public void initContactModificationById(int id) {
-    wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "']")).click();
-  }
-
-  public void submitContactModification() {
-    click(By.name("update"));
-  }
-
-  public void deleteSelectedContacts() throws InterruptedException {
+  public void deletedContact() {
     click(By.xpath("//input[@value='Delete']"));
-    wd.switchTo().alert().accept();
-    wd.findElement(By.cssSelector("div.msgbox"));
   }
 
-  public void create(ContactData contactData, boolean b) {
-    clickAddNewContact();
-    fillContactForm(contactData, true);
-    submitAddAddressForm();
-    contactCache = null;
+  public void deletedContact(ContactData contact) {
+    selectContactById(contact.getId());
+    deletedContact();
+  }
+
+  public void editContact(int index) {
+    WebElement checkbox = wd.findElements(By.name("selected[]")).get(index);
+    WebElement row = checkbox.findElement(By.xpath("./../.."));
+    List<WebElement> cells = row.findElements(By.tagName("td"));
+    cells.get(7).findElement(By.tagName("a")).click();
+  }
+
+  public void editContactById(int id) {
+    WebElement checkbox = wd.findElement(By.cssSelector(String.format("input[value='%s']", id)));
+    WebElement row = checkbox.findElement(By.xpath("./../.."));
+    List<WebElement> cells = row.findElements(By.tagName("td"));
+    cells.get(7).findElement(By.tagName("a")).click();
+  }
+
+  public void updateContact() {
+    click(By.xpath("//input[@value='Update']"));
   }
 
   public boolean isThereAContact() {
     return isElementPresent(By.name("selected[]"));
   }
 
-  public void modify(ContactData contactData, boolean b) {
-    fillContactForm(contactData, false);
-    submitContactModification();
-    contactCache = null;
-  }
 
-  public void delete(ContactData contact) throws InterruptedException {
-    selectContactById(contact.getId());
-    deleteSelectedContacts();
-    contactCache = null;
-  }
+  public void fillContactForm(ContactData contactData) {
+    type(By.name("firstname"), contactData.getFirstName());
+    type(By.name("middlename"), contactData.getMiddleName());
+    type(By.name("lastname"), contactData.getLastName());
+    type(By.name("home"), contactData.getHomePhone());
+    type(By.name("mobile"), contactData.getMobilePhone());
+    type(By.name("email"), contactData.getEmail());
+    selectType(By.name("bday"), contactData.getDay());
+    selectType(By.name("bmonth"), contactData.getMonth());
+    type(By.name("byear"), contactData.getYear());
 
-  private Contacts contactCache = null;
+    if (contactData.getGroups() == null && contactData.getMiddleName() == null && contactData.getHomePhone() == null
+            && contactData.getMobilePhone() == null && contactData.getEmail() == null && contactData.getDay() == null
+            && contactData.getMonth() == null && contactData.getYear() == null && contactData.getPhoto() == null) {
+      return;
+    }
+  }
 
   public Contacts all() {
-    if (contactCache != null) {
-      return new Contacts(contactCache);
-    }
-    contactCache = new Contacts();
-    List<WebElement> rows = wd.findElements(By.xpath("//tr[@name='entry']"));
+    Contacts contacts = new Contacts();
+    List<WebElement> rows = wd.findElements(By.name("entry"));
     for (WebElement row : rows) {
       List<WebElement> cells = row.findElements(By.tagName("td"));
       int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value"));
       String lastName = cells.get(1).getText();
       String firstName = cells.get(2).getText();
-      String address = cells.get(3).getText();
-      String allEmails = cells.get(4).getText();
       String allPhones = cells.get(5).getText();
-
-      contactCache.add(new ContactData().withId(id).withFirstName(firstName).withLastName(lastName).withAddress(address)
-              .withAllEmails(allEmails).withAllPhones(allPhones));
+      String allEmails = cells.get(4).getText();
+      String address = cells.get(3).getText();
+      contacts.add(new ContactData().withId(id).withFirstName(firstName).withLastName(lastName)
+              .withAllPhones(allPhones).withAllEmails(allEmails).withAddress(address));
     }
-    return new Contacts(contactCache);
+    return contacts;
   }
 
-  public int count() {
-    return wd.findElements(By.name("selected[]")).size();
-  }
-
-  public ContactData infoFromEditForm(ContactData contact) {
-    initContactModificationById(contact.getId());
-    String firstName = wd.findElement(By.name("firstname")).getAttribute("value");
-    String lastName = wd.findElement(By.name("lastname")).getAttribute("value");
-    String address = wd.findElement(By.name("address")).getAttribute("value");
+  public ContactData intoFromEditForm(ContactData contact) {
+    editContactById(contact.getId());
+    String firstname = wd.findElement(By.name("firstname")).getAttribute("value");
+    String lastname = wd.findElement(By.name("lastname")).getAttribute("value");
     String home = wd.findElement(By.name("home")).getAttribute("value");
-    String mobile = wd.findElement(By.name("mobile")).getAttribute("value");
     String work = wd.findElement(By.name("work")).getAttribute("value");
+    String mobile = wd.findElement(By.name("mobile")).getAttribute("value");
     String email = wd.findElement(By.name("email")).getAttribute("value");
     String email2 = wd.findElement(By.name("email2")).getAttribute("value");
     String email3 = wd.findElement(By.name("email3")).getAttribute("value");
-
+    String address = wd.findElement(By.name("address")).getAttribute("value");
     wd.navigate().back();
-    return new ContactData().withId(contact.getId()).withFirstName(firstName).withLastName(lastName)
-            .withAddress(address)
+    return new ContactData().withId(contact.getId())
+            .withFirstName(firstname).withLastName(lastname)
             .withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work)
-            .withEmail(email).withEmail2(email2).withEmail3(email3);
+            .withEmail(email).withEmail2(email2).withEmail3(email3)
+            .withAddress(address);
   }
 
-  public void addContactToGroup(int contactId, int groupId) {
-    selectContactById(contactId);
-    selectGroupById(groupId);
-    clickByAddTo();
+  public void selectGroupById(int id) {
+    click(By.name("to_group"));
+    WebElement select = wd.findElement(By.name("to_group"));
+    select.click();
+    select.findElement(By.cssSelector("option[value='" + id + "']")).click();
   }
 
-  public void removeContactFromGroup(int contactId, int groupId) {
-    filterByGroup(groupId);
-    selectContactById(contactId);
-    removeFromGroup();
+  public void selectGroupByName(String name) {
+    click(By.name("to_group"));
+    WebElement select = wd.findElement(By.name("to_group"));
+    select.click();
+    select.findElement(By.xpath("//select[@name='to_group']/option[text()='" + name + "']")).click();
   }
 
-  public void removeFromGroup() {
-    click(By.xpath("(//input[@name='remove'])"));
+  public void addToGroup(ContactData contact, GroupData group) {
+    selectContactById(contact.getId());
+    selectGroupByName(group.getName());
+    click(By.name("add"));
   }
 
-  public void filterByGroup(int groupId) {
-    click(By.xpath("(//select[@name='group']/option[@value='" + groupId + "'])"));
+  public void removeFromGroup(ContactData contact) {
+    filterContactsByGroup(contact);
+    selectContactById(contact.getId());
+    click(By.name("remove"));
+    click(By.linkText("home"));
+    selectAllGroupsContacts();
   }
 
-  public void clickByAddTo() {
-    click(By.xpath("(//input[@name='add'])"));
+  private void filterContactsByGroup(ContactData contact) {
+    WebElement select = wd.findElement(By.name("group"));
+    select.click();
+    select.findElement(By.cssSelector("option[value='" + contact.getGroups().iterator().next().getId() + "']")).click();
   }
 
-  public void selectGroupById(int groupId) {
-    click(By.xpath("(//select[@name='to_group']/option[@value='" + groupId + "'])"));
+  private void selectAllGroupsContacts() {
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText("[all]");
   }
 
-  public boolean isEmptyNoneList() {
-    selectNoneGroup();
-    boolean bool = isEmptyGroup();
-    selectAllGroup();
-    return bool;
+  public void initDeletionContactFromGroup(String groupName) {
+    click(By.xpath("//input[@value='Remove from \""+groupName+"\"']"));
   }
 
-  public void selectNoneGroup() {
-    click(By.xpath("(//select[@name='group']/option[@value='[none]'])"));
-  }
-
-  public void selectAllGroup() {
-    click(By.xpath("(//select[@name='group']/option[text()='[all]'])"));
-  }
-
-  public boolean isEmptyGroup() {
-    return isElementPresent(By.xpath("//span[@id='search_count'][text()='0']"));
-  }
-
-  public ContactData findContactWithGroup(Contacts contacts) {
-    for (ContactData contact : contacts) {
-      Set<GroupData> contInGroup = contact.getGroups();
-      if (contInGroup.size() > 0) {
-        return contact;
-      }
-    }
-    return null;
-  }
-
-  public ContactData findContactWithoutGroup(Contacts contacts) {
-    for (ContactData contact : contacts) {
-      Set<GroupData> contInGroup = contact.getGroups();
-      if (contInGroup.size() == 0) {
-        return contact;
-      }
-    }
-    return null;
+  public void deletionContactFromGroup(ContactData contact, String groupName) {
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText(groupName);
+    selectContactById(contact.getId());
+    initDeletionContactFromGroup(groupName);
+    Assert.assertTrue(isElementPresent(By.xpath("//div[@class = 'msgbox' and contains(text(),'Users removed.')]")));
   }
 }

@@ -4,36 +4,49 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
 
 public class HelperBase {
-  protected WebDriver wd;
+  protected final WebDriver wd;
 
   public HelperBase(WebDriver wd) {
     this.wd = wd;
   }
 
-  protected void type(By locator, String text) {
+  public void click(By locator) {
+    wd.findElement(locator).click();
+  }
+
+  public void type(By locator, String text) {
     click(locator);
     if (text != null) {
-      String existingTest = wd.findElement(locator).getAttribute("value");
-      if (!text.equals(existingTest)) {
+      String existingText = wd.findElement(locator).getAttribute("value");
+      if (!text.equals(existingText)) {
         wd.findElement(locator).clear();
         wd.findElement(locator).sendKeys(text);
       }
     }
+    return;
   }
 
-  protected void attach(By locator, File file) {
+  public void attach(By locator, File file) {
     if (file != null) {
       wd.findElement(locator).sendKeys(file.getAbsolutePath());
     }
+    return;
   }
 
-  protected void click(By locator) {
-    wd.findElement(locator).click();
+  public void selectType(By locator, String sType) {
+    if (sType != null) {
+      wd.findElement(locator).click();
+      new Select(wd.findElement(locator)).selectByVisibleText(sType);
+      wd.findElement(locator).click();
+    }
+    return;
   }
+
 
   public boolean isAlertPresent() {
     try {
@@ -44,7 +57,11 @@ public class HelperBase {
     }
   }
 
-  protected boolean isElementPresent(By locator) {
+  public void alertAccept() {
+    wd.switchTo().alert().accept();
+  }
+
+  public boolean isElementPresent(By locator) {
     try {
       wd.findElement(locator);
       return true;

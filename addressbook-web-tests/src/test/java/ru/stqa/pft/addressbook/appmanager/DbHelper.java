@@ -17,6 +17,7 @@ public class DbHelper {
   private final SessionFactory sessionFactory;
 
   public DbHelper() {
+    // A SessionFactory is set up once for an application!
     final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
             .configure() // configures settings from hibernate.cfg.xml
             .build();
@@ -39,23 +40,5 @@ public class DbHelper {
     session.getTransaction().commit();
     session.close();
     return new Contacts(result);
-  }
-
-  public Contacts getContactById(int contactId) {
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
-    List<ContactData> result = session.createQuery("from ContactData where id = " + contactId).list();
-    session.getTransaction().commit();
-    session.close();
-    return new Contacts(result);
-  }
-
-  public Groups getGroupById(int groupId) {
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
-    List<GroupData> result = session.createQuery("from GroupData where id = " + groupId).list();
-    session.getTransaction().commit();
-    session.close();
-    return new Groups(result);
   }
 }
